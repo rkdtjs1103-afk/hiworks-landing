@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하이웍스 - 올인원 업무 플랫폼</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    /* =============================================
+       Design Tokens
+    ============================================= */
+    :root {
+      --color-black-0:   #FFFFFF;
+      --color-black-100: #F8F8F8;
+      --color-black-200: #E9E9E9;
+      --color-black-300: #CDCDCD;
+      --color-black-400: #969696;
+      --color-black-500: #7D7D7D;
+      --color-black-600: #4B4B4B;
+      --color-black-700: #191919;
+      --color-black-800: #2B2B2B;
+      --color-black-900: #000000;
+
+      --color-blue-0:   #EFF5FD;
+      --color-blue-100: #DCEBF9;
+      --color-blue-500: #0080DD;
+      --color-blue-600: #1262AD;
+
+      --color-indigo-0:   #EFF4FC;
+      --color-indigo-900: #232C38;
+
+      --color-purple-0:   #F5F2FF;
+      --color-purple-50:  #ECE7FF;
+      --color-purple-100: #E3DCFF;
+      --color-purple-800: #5238B7;
+      --color-purple-900: #3E13B6;
+
+      /* ── Black / grey extensions ── */
+      --color-black-150: #EFEFEF;
+      --color-black-350: #B8B8B8;
+
+      /* ── Blue extensions ── */
+      --color-blue-550: #006DC4;
+      --color-blue-575: #005BA3;
+
+      /* ── Dark / Navy backgrounds ── */
+      --color-dark-960: #03071a;
+      --color-dark-950: #030c1c;
+      --color-dark-940: #06152e;
+      --color-dark-920: #080E1C;
+      --color-dark-870: #05193A;
+      --color-dark-850: #0a2762;
+      --color-dark-840: #0a1e4a;
+      --color-dark-830: #0d2860;
+      --color-dark-800: #112f72;
+      --color-dark-780: #022880;
+      --color-dark-fn-email: #002093;
+      --color-dark-fn-group: #003399;
+
+      /* ── AI gradient colors ── */
+      --color-ai-blue:      #3052FF;
+      --color-ai-purple:    #9600E6;
+      --color-ai-cyan:      #3BC1FF;
+      --color-ai-deep-blue: #0011FF;
+
+      /* ── Alpha / transparent colors ── */
+      --color-white-a10:  rgba(255,255,255,.1);
+      --color-white-a15:  rgba(255,255,255,.15);
+      --color-white-a25:  rgba(255,255,255,.25);
+      --color-white-a40:  rgba(255,255,255,.4);
+      --color-white-a55:  rgba(255,255,255,.55);
+      --color-white-a70:  rgba(255,255,255,.7);
+      --color-white-a80:  rgba(255,255,255,.8);
+      --color-black-a08:  rgba(0,0,0,.08);
+      --color-blue-a18:   rgba(113,167,255,.18);
+      --color-dark-a66:   rgba(8,14,28,.66);
+      --color-fn-overlay-88: rgba(0,32,147,.88);
+      --color-fn-overlay-55: rgba(0,32,147,.55);
+      --color-fn-overlay-40: rgba(5,25,58,.4);
+      --color-ai-blue-shadow:   rgba(48,82,255,.2);
+      --color-ai-purple-shadow: rgba(150,0,230,.15);
+      --color-blue-shadow:      rgba(0,128,221,.45);
+
+      --font: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --px: 100px; /* section horizontal padding */
+    }
+
+    /* =============================================
+       Reset
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-family: var(--font); -webkit-font-smoothing: antialiased; }
+    body { background: #fff; }
+    .page-wrap { max-width: 1680px; margin: 0 auto; overflow-x: hidden; }
+    a    { text-decoration: none; color: inherit; cursor: pointer; }
+    button { border: none; background: none; cursor: pointer; font-family: var(--font); }
+    ul, ol { list-style: none; }
+
+    /* =============================================
+       Buttons
+    ============================================= */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 6px; font-family: var(--font); font-weight: 600;
+      transition: background .15s, opacity .15s;
+    }
+    .btn:hover { opacity: .88; }
+
+    .btn--primary-40   { padding: 8px 16px;  background: var(--color-blue-500);   color: #fff; font-size: 14px; line-height: 1.43em; }
+    .btn--tertiary-40  { padding: 8px 16px;  background: var(--color-indigo-900); color: #fff; font-size: 14px; line-height: 1.43em; }
+    .btn--secondary-40 { padding: 8px 16px;  background: var(--color-indigo-0);   color: var(--color-blue-500); font-size: 14px; line-height: 1.43em; }
+    .btn--secondary-40:hover  { background: #DCEBF9; opacity: 1; }
+    .btn--secondary-40:active { background: #C8DCEF; opacity: 1; }
+    .btn--primary-48   { padding: 12px 32px; background: var(--color-blue-500);   color: #fff; font-size: 16px; line-height: 1.5em; }
+    .btn--secondary-48 { padding: 12px 32px; background: var(--color-indigo-0);   color: var(--color-blue-500); font-size: 16px; line-height: 1.5em; }
+    .btn--primary-60   { padding: 16px 32px; background: var(--color-blue-500);   color: #fff; font-size: 20px; font-weight: 600; line-height: 1.4em; }
+    /* Primary button hover / press */
+    .btn--primary-40:hover,  .btn--primary-48:hover,  .btn--primary-60:hover  { background: #006DC4; opacity: 1; }
+    .btn--primary-40:active, .btn--primary-48:active, .btn--primary-60:active { background: #005BA3; opacity: 1; }
+    /* Text button hover / press */
+    .link-more { transition: color .15s; }
+    .link-more:hover  { color: var(--color-black-700); text-decoration: underline; }
+    .link-more:active { color: var(--color-black-900); text-decoration: underline; }
+
+    /* =============================================
+       GNB
+    ============================================= */
+    .gnb {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 52px; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--px);
+      transition: background .25s, box-shadow .25s;
+    }
+    .gnb--dark  { background: transparent; box-shadow: none; }
+    .gnb--white { background: #fff; box-shadow: 0 1px 0 var(--color-black-200); }
+
+    .gnb__left  { display: flex; align-items: center; gap: 48px; }
+    .gnb__logo  { font-size: 22px; font-weight: 800; letter-spacing: -.04em; }
+    .gnb--dark  .gnb__logo { color: #fff; }
+    .gnb--white .gnb__logo { color: var(--color-black-700); }
+
+    .gnb__menu  { display: flex; align-items: center; gap: 40px; }
+    .gnb__menu a {
+      font-size: 16px; font-weight: 400; line-height: 1.5em;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .gnb--dark  .gnb__menu a { color: rgba(255,255,255,.85); }
+    .gnb--white .gnb__menu a { color: var(--color-black-600); }
+    .gnb__menu a { transition: color .15s; }
+    .gnb__menu a:hover { color: var(--color-blue-500); }
+    .gnb--dark .gnb__menu a:hover { color: #fff; }
+
+    .gnb__right { display: flex; align-items: center; gap: 14px; }
+    /* dark 모드 secondary 버튼 */
+    .gnb--dark .btn--secondary-40 {
+      background: rgba(255,255,255,.15); color: rgba(255,255,255,.9);
+    }
+    .gnb--dark .btn--secondary-40:hover  { background: rgba(255,255,255,.25); }
+    .gnb--dark .btn--secondary-40:active { background: rgba(255,255,255,.35); }
+
+    /* =============================================
+       Section 1 — Main Banner
+    ============================================= */
+    /* =============================================
+       Hero Banner
+    ============================================= */
+    .hero-banner {
+      position: relative;
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      background: #191919;
+    }
+    .hero-banner__video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .scroll-down-btn {
+      position: absolute;
+      left: 50%; bottom: 40px;
+      transform: translateX(-50%);
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
+      transition: background .2s;
+    }
+    .scroll-down-btn:hover  { background: rgba(255,255,255,.25); }
+    .scroll-down-btn:active { background: rgba(255,255,255,.35); }
+
+    .sec-main {
+      padding: 0 var(--px);
+      display: flex; flex-direction: column; gap: 40px;
+    }
+    .sec-main__header {
+      font-size: 36px; font-weight: 700; line-height: 1.389em;
+      letter-spacing: -.014em; color: var(--color-black-700);
+    }
+    .main-body { display: flex; flex-direction: column; gap: 20px; }
+    .main-banner {
+      position: relative; height: 460px; border-radius: 16px; overflow: hidden;
+      background: #030c1c;
+    }
+    .main-banner__video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .main-banner__content {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      display: flex; flex-direction: column; align-items: center; gap: 32px;
+      width: 358px;
+    }
+    .main-banner__text { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .main-banner__subtitle {
+      font-size: 18px; font-weight: 600; line-height: 1.444em;
+      letter-spacing: -.028em; color: rgba(255,255,255,.7);
+      text-align: center;
+    }
+    .main-banner__title {
+      font-size: 36px; font-weight: 700; line-height: 1.389em;
+      letter-spacing: -.014em; color: #fff;
+      text-align: center;
+    }
+    .main-banner__content .btn--primary-60 { width: 156px; }
+    .main-banner__panel {
+      position: absolute; right: 32px; top: 0; bottom: 0;
+      display: flex; flex-direction: column; gap: 64px;
+      align-items: stretch; justify-content: center;
+      padding: 32px;
+    }
+    .main-banner__menu { display: flex; flex-direction: column; gap: 16px; width: 139px; }
+    .main-banner__menu-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 14px; width: 139px;
+      background: rgba(255,255,255,.1); border-radius: 6px;
+      color: #fff; font-size: 16px; font-weight: 400; line-height: 1.5em;
+      white-space: nowrap;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.15);
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .main-banner__menu-btn:hover {
+      background: #fff; color: #000; border-color: rgba(0,0,0,.08);
+    }
+    .main-banner__menu-btn svg path { fill: currentColor; }
+    .main-banner__menu-icon {
+      width: 24px; height: 24px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .main-banner__pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 12px; width: 139px;
+      background: rgba(255,255,255,.1); border-radius: 56px;
+      color: #fff;
+    }
+    .main-banner__pagination-side {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 14px; font-weight: 400;
+    }
+    .main-banner__pagination-side svg { display: block; flex-shrink: 0; }
+    .main-banner__slash { width: 1px; height: 10px; background: rgba(255,255,255,.4); }
+    .main-cards {
+      display: flex; gap: 20px;
+    }
+    .card-main {
+      flex: 1; height: 260px; border-radius: 10px;
+      padding: 28px;
+      display: flex; flex-direction: column;
+    }
+    .card-main--blue {
+      background: var(--color-blue-0);
+      position: relative; overflow: hidden;
+    }
+    .card-main--blue::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url('./images/card-main card-main--blue.png');
+      background-size: cover; background-position: center;
+      opacity: 0; transition: opacity .3s;
+    }
+    .card-main--blue:hover::before { opacity: 0.55; }
+    .card-main--blue:hover .card-main__label--blue { background: #fff; }
+    .card-main--blue:hover .card-main__title { color: var(--color-blue-600); }
+
+    .card-main--purple {
+      background: var(--color-purple-0);
+      position: relative; overflow: hidden;
+      transition: background .3s;
+    }
+    .card-main--purple::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url('./images/card-main card-main--purple.png');
+      background-size: 120% auto; background-position: 50% 50%;
+      opacity: 0; transition: opacity .3s;
+    }
+    .card-main--purple:hover { background: #ECE7FF; }
+    .card-main--purple:hover::before { opacity: 1; }
+    .card-main--purple:hover .card-main__label--purple { background: #fff; }
+
+    .card-main__label { position: relative; z-index: 1; }
+    .card-main__body  { position: relative; z-index: 1; }
+    .card-main--ai {
+      background: #fff;
+      border: none;
+      position: relative;
+      transition: box-shadow .3s;
+    }
+    .card-main--ai:hover {
+      box-shadow: 0 8px 32px rgba(48,82,255,.2), 0 4px 16px rgba(150,0,230,.15);
+    }
+    .card-main--ai::before {
+      content: ''; position: absolute; inset: -1.5px; border-radius: 11.5px;
+      background: linear-gradient(40deg, #3052FF, #ffffff, #9600E6, #3052FF, #ffffff, #9600E6);
+      background-size: 300% 300%;
+      animation: aiStroke 4s ease-in-out infinite;
+      z-index: -1;
+    }
+    @keyframes aiStroke {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .card-main__label {
+      display: inline-flex; align-items: center;
+      padding: 4px 16px; border-radius: 56px;
+      font-size: 16px; font-weight: 600; line-height: 1.5em;
+      width: fit-content;
+    }
+    .card-main__label--blue   { background: var(--color-blue-100);   color: var(--color-blue-500); }
+    .card-main__label--purple { background: var(--color-purple-100); color: var(--color-purple-800); }
+    .card-main__label--ai {
+      background: linear-gradient(107deg, #9600E6, #3BC1FF, #0011FF, #9600E6, #3BC1FF);
+      background-size: 300% 300%;
+      color: #fff; border-radius: 500px;
+      animation: aiStroke 4s ease-in-out infinite;
+    }
+    .card-main__body {
+      display: flex; flex-direction: column; justify-content: flex-end;
+      gap: 12px; flex: 1;
+    }
+    .card-main__title { font-size: 20px; font-weight: 700; line-height: 1.4em; color: var(--color-black-700); }
+    .card-main__desc  { font-size: 16px; font-weight: 400; line-height: 1.5em; color: var(--color-black-800); }
+
+    /* =============================================
+       Page body (sections below hero)
+    ============================================= */
+    .page-body {
+      display: flex; flex-direction: column; gap: 120px;
+      padding: 120px 0;
+    }
+
+    /* Shared section header */
+    .sec-title {
+      font-size: 36px; font-weight: 700;
+      line-height: 1.389em; letter-spacing: -.005em;
+      color: var(--color-black-700);
+    }
+
+    /* =============================================
+       Section 2 — Features
+    ============================================= */
+    .sec-features {
+      padding: 0 var(--px);
+      display: flex; flex-direction: column; gap: 40px;
+    }
+    .tab-bar {
+      display: flex; align-items: center; gap: 0;
+    }
+    .tab {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 0 20px 14px;
+      font-size: 18px; font-weight: 600; line-height: 1.4em;
+      color: var(--color-black-400); cursor: pointer;
+      white-space: nowrap; background: none; border: none; font-family: var(--font);
+    }
+    .tab:first-child { padding-left: 0; }
+    .tab.is-active {
+      font-weight: 700; color: var(--color-black-700);
+    }
+    .tab.is-active::after {
+      content: ''; display: inline-block;
+      width: 6px; height: 6px; border-radius: 100%;
+      background: var(--color-black-700);
+      flex-shrink: 0; align-self: flex-start; margin-top: 5px;
+    }
+    /* Features tab row */
+    .features-tab-row {
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .features-carousel-nav {
+      display: flex; gap: 8px; padding-bottom: 14px; flex-shrink: 0;
+    }
+    .carousel-arrow {
+      width: 36px; height: 36px; border-radius: 4px;
+      background: #fff; border: 1px solid var(--color-black-200);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--color-black-700);
+      transition: background .15s, color .15s;
+    }
+    .carousel-arrow:hover:not(:disabled) { background: var(--color-black-100); }
+    .carousel-arrow:disabled {
+      background: #F8F8F8; color: #CDCDCD; cursor: default;
+    }
+
+    /* Multiple features grids */
+    .features-grid { display: flex; gap: 20px; }
+    .features-grid:not(.is-active) { display: none; }
+
+    .card-fn-big {
+      width: 243px; min-width: 243px; height: 380px; flex-shrink: 0;
+      border-radius: 8px; padding: 24px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      background: #05193A center/cover no-repeat;
+      overflow: hidden; position: relative;
+    }
+    /* Solid-colour hover overlay — covers the background image */
+    .card-fn-big::before {
+      content: ''; position: absolute; inset: 0;
+      opacity: 0; transition: opacity .3s; z-index: 1;
+    }
+    .card-fn-big:hover::before { opacity: 1; }
+    .card-fn-big--email::before { background: #002093; }
+    .card-fn-big--group::before { background: #003399; }
+    .card-fn-big--hr::before    { background: #3E13B6; }
+    .card-fn-big--erp::before   { background: #3E13B6; }
+    .card-fn-big--tax::before   { background: #3E13B6; }
+
+    .card-fn-big--email  { background-image: linear-gradient(180deg, rgba(0,32,147,.88) 0%, rgba(0,32,147,.55) 50%, rgba(5,25,58,.4) 100%), url('./images/card-fn-big-기업메일.png'); background-size: cover; }
+    .card-fn-big--group  { background-image: linear-gradient(180deg, rgba(0,32,147,.88) 0%, rgba(0,32,147,.55) 50%, rgba(5,25,58,.4) 100%), url('./images/card-fn-big-그룹웨어.png'); background-size: cover; }
+    .card-fn-big--hr     { background-image: linear-gradient(180deg, rgba(0,32,147,.88) 0%, rgba(0,32,147,.55) 50%, rgba(5,25,58,.4) 100%), url('./images/card-fn-big-인사근무.png'); background-size: cover; }
+    .card-fn-big--erp    { background-image: linear-gradient(180deg, rgba(0,32,147,.88) 0%, rgba(0,32,147,.55) 50%, rgba(5,25,58,.4) 100%), url('./images/card-fn-big-경리회계.png'); background-size: cover; }
+    .card-fn-big--tax    { background-image: linear-gradient(180deg, rgba(0,32,147,.88) 0%, rgba(0,32,147,.55) 50%, rgba(5,25,58,.4) 100%), url('./images/card-fn-big-세금계산서.png'); background-size: cover; }
+
+    /* Content sits above the overlay */
+    .card-fn-big__top { position: relative; z-index: 2; }
+    .card-fn-big__title { font-size: 20px; font-weight: 700; line-height: 1.4em; color: #fff; text-align: left; }
+    .card-fn-big__desc {
+      font-size: 14px; font-weight: 400; line-height: 1.57em;
+      color: rgba(255,255,255,.8); margin-top: 8px;
+      opacity: 0; transition: opacity .3s;
+    }
+    .card-fn-big:hover .card-fn-big__desc { opacity: 1; }
+    .card-fn-big__btn {
+      width: 100%; position: relative; z-index: 2;
+      padding: 8px 14px;
+      background: rgba(255,255,255,.1); border-radius: 6px;
+      font-size: 14px; font-weight: 400; color: #fff;
+      text-align: center; transition: background .2s, color .2s;
+    }
+    .card-fn-big__btn:hover { background: #fff; color: #000; }
+    .features-scroll { flex: 1; overflow-x: auto; display: flex; flex-direction: column; gap: 20px; }
+    .features-scroll::-webkit-scrollbar { display: none; }
+    .features-row { display: flex; gap: 20px; }
+    .card-fn {
+      width: 243px; min-width: 243px; height: 180px; flex-shrink: 0;
+      border-radius: 8px; padding: 24px;
+      background: #fff; border: 1px solid var(--color-black-200);
+      display: flex; flex-direction: column; justify-content: space-between;
+      cursor: pointer; transition: background .15s;
+    }
+    .card-fn:hover  { background: #F8F8F8; }
+    .card-fn:active { background: #EFEFEF; }
+    .card-fn__head { display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-fn__title { font-size: 18px; font-weight: 700; line-height: 1.444em; letter-spacing: -.028em; color: var(--color-black-700); }
+    .card-fn__desc  { font-size: 16px; font-weight: 400; line-height: 1.5em; color: var(--color-black-600); }
+
+    /* =============================================
+       Section 3 — Stats (13만+)
+    ============================================= */
+    .sec-stats {
+      padding: 0 var(--px);
+      display: flex; flex-direction: column; gap: 40px;
+    }
+    .banner-rank {
+      background: var(--color-blue-0); border-radius: 12px;
+      padding: 48px 96px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .stats-row { display: flex; align-items: center; justify-content: center; gap: 120px; }
+    .stat { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+    .stat__num    { font-size: 26px; font-weight: 700; line-height: 1.385em; color: var(--color-blue-500); }
+    .stat__label  { font-size: 20px; font-weight: 600; line-height: 1.4em; color: var(--color-black-800); }
+    .stat__source { font-size: 16px; font-weight: 400; line-height: 1.5em; color: var(--color-black-500); }
+    .stat-divider { width: 1px; height: 60px; background: var(--color-blue-100); border-radius: 10px; }
+
+    /* Logo loop — full-width, outside banner-rank padding */
+    .logo-loop {
+      width: calc(100% + var(--px) * 2);
+      margin-left: calc(var(--px) * -1);
+      overflow: hidden; display: flex; flex-direction: column; gap: 16px;
+      padding: 24px 0;
+    }
+    .logo-track {
+      display: flex; gap: 24px; width: max-content;
+      animation: logoScroll 30s linear infinite;
+    }
+    .logo-track:nth-child(2) { animation-direction: reverse; }
+    @keyframes logoScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .logo-chip {
+      height: 48px; padding: 0 19px;
+      background: #fff; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-chip img { height: 29px; width: auto; display: block; }
+
+    /* =============================================
+       Section 4 — Why Hiworks
+    ============================================= */
+    .sec-why { padding: 0 20px; }
+    .why-wrap {
+      border-radius: 12px; overflow: hidden;
+      min-height: 912px; padding: 153px 80px;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        url('./images/why-wrap-bg.png') center 30%/cover no-repeat,
+        linear-gradient(180deg, #000 3%, #080E1C 64%, rgba(8,14,28,.66) 89%, transparent 100%),
+        linear-gradient(135deg, #03071a 0%, #0a1e4a 50%, #0d2860 100%);
+    }
+    .why-inner { display: flex; align-items: center; gap: 60px; width: 100%; max-width: 1296px; }
+    .why-left  { flex: 1; display: flex; flex-direction: column; gap: 48px; }
+    .why-heading { font-size: 36px; font-weight: 700; line-height: 1.389em; color: var(--color-black-100); }
+    .why-tabs { display: flex; flex-direction: column; gap: 16px; }
+    .why-tab {
+      display: flex; align-items: center; gap: 4px;
+      padding: 16px 0; cursor: pointer;
+      transition: none;
+    }
+    .why-tab__label { font-size: 26px; font-weight: 600; line-height: 1.385em; transition: color .2s; }
+    .why-tab.is-active .why-tab__label { color: #E9E9E9; }
+    .why-tab:not(.is-active) .why-tab__label { color: var(--color-black-600); }
+    .why-tab:not(.is-active):hover .why-tab__label { color: var(--color-black-500); }
+    .why-tab__arrow { width: 20px; height: 20px; flex-shrink: 0; opacity: 0; }
+    .why-tab.is-active .why-tab__arrow { opacity: 1; }
+    .why-right {
+      width: 638px; height: 638px; flex-shrink: 0;
+      border-radius: 10px; overflow: hidden;
+      background: rgba(255,255,255,.1);
+      position: relative;
+      transition: transform .3s ease;
+    }
+    .why-right:hover { transform: translateY(-6px); }
+    .why-panel {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .why-panel.is-active {
+      opacity: 1; pointer-events: auto;
+    }
+    .cert-top    { padding: 20px; }
+    .cert-badge  {
+      display: inline-flex; padding: 4px 16px;
+      background: rgba(255,255,255,.1); border-radius: 4px;
+      font-size: 20px; font-weight: 600; color: var(--color-black-400);
+    }
+    .cert-imgs   {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 16px 32px;
+    }
+    .cert-imgs__img {
+      width: 100%; height: 100%; object-fit: contain;
+    }
+    .cert-body   { padding: 40px 48px; display: flex; flex-direction: column; gap: 12px; }
+    .cert-title  { font-size: 22px; font-weight: 700; line-height: 1.455em; color: var(--color-black-100); }
+    .cert-list   { display: flex; flex-direction: column; gap: 8px; }
+    .cert-item   { font-size: 20px; font-weight: 400; line-height: 1.4em; color: var(--color-black-100); }
+
+    /* =============================================
+       Section 5 — Pricing
+    ============================================= */
+    .sec-price { padding: 0 var(--px); display: flex; flex-direction: column; gap: 24px; }
+    .price-tabs-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+    .link-more {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 16px; font-weight: 400; color: var(--color-black-600); cursor: pointer;
+    }
+    .price-cards { display: flex; gap: 24px; }
+    .card-price {
+      flex: 1; max-width: 506px;
+      padding: 32px;
+      background: #fff; border: 1px solid var(--color-black-200); border-radius: 10px;
+      display: flex; flex-direction: column; gap: 20px;
+      transition: background .15s; cursor: pointer;
+    }
+    .card-price:hover  { background: #F8F8F8; }
+    .card-price:active { background: #EFEFEF; }
+    .card-price__label {
+      display: inline-flex; padding: 4px 8px;
+      background: var(--color-blue-0); border-radius: 4px;
+      font-size: 16px; font-weight: 600; color: var(--color-blue-500);
+      align-self: flex-start;
+    }
+    .card-price__amount { display: flex; align-items: flex-end; gap: 4px; }
+    .card-price__num  { font-size: 32px; font-weight: 700; line-height: 1; color: var(--color-black-700); }
+    .card-price__unit { font-size: 20px; font-weight: 700; line-height: 1.4em; color: var(--color-black-700); }
+    .card-price__basis{ font-size: 14px; font-weight: 600; color: var(--color-black-300); padding-bottom: 2px; }
+    .card-price__tag  { font-size: 16px; font-weight: 600; }
+    .card-price__tag s { color: var(--color-black-400); text-decoration: line-through; }
+    .card-price__tag span { color: var(--color-blue-500); margin-left: 6px; }
+    .card-price__desc { font-size: 16px; font-weight: 400; line-height: 1.5em; color: var(--color-black-800); flex: 1; }
+    .card-price__sub  { font-size: 14px; font-weight: 400; color: var(--color-black-500); line-height: 1.5em; }
+    .card-price__cta  {
+      padding: 12px 32px;
+      background: var(--color-blue-500); color: #fff;
+      font-size: 16px; font-weight: 600; border-radius: 6px;
+      align-self: flex-end;
+      transition: background .15s;
+    }
+    .card-price__cta:hover  { background: #006DC4; }
+    .card-price__cta:active { background: #005BA3; }
+
+    /* =============================================
+       Section 6 — Benefits
+    ============================================= */
+    .sec-benefits { padding: 0 var(--px); display: flex; flex-direction: column; gap: 48px; }
+    .subsec { display: flex; flex-direction: column; gap: 24px; }
+    .subsec__head { display: flex; justify-content: space-between; align-items: center; }
+    .subsec__title { font-size: 22px; font-weight: 700; line-height: 1.455em; color: var(--color-black-700); }
+
+    /* Event cards */
+    .events-grid { display: flex; gap: 20px; }
+    .card-event {
+      flex: 1; border-radius: 8px; overflow: hidden;
+      border: 1px solid var(--color-black-200); cursor: pointer;
+    }
+    .card-event__img {
+      height: 260px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: var(--color-black-500);
+      overflow: hidden;
+    }
+    .card-event__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-event__body { padding: 24px; background: #fff; display: flex; flex-direction: column; gap: 8px; transition: background .15s; }
+    .card-event:hover  .card-event__body { background: #F8F8F8; }
+    .card-event:active .card-event__body { background: #EFEFEF; }
+    .card-event__title{ font-size: 18px; font-weight: 700; line-height: 1.444em; letter-spacing: -.028em; color: var(--color-black-700); }
+    .card-event__date { font-size: 16px; font-weight: 600; line-height: 1.5em; color: var(--color-black-400); }
+
+    /* CS cards */
+    .cs-grid { display: flex; flex-direction: column; gap: 16px; }
+    .cs-row  { display: flex; gap: 20px; }
+    .card-cs {
+      flex: 1; padding: 24px; gap: 8px;
+      background: #fff; border: 1px solid var(--color-black-200); border-radius: 8px;
+      display: flex; flex-direction: column;
+      cursor: pointer; transition: background .15s;
+    }
+    .card-cs:hover  { background: #F8F8F8; }
+    .card-cs:active { background: #EFEFEF; }
+    .card-cs__head  { display: flex; justify-content: space-between; align-items: center; }
+    .card-cs__title { font-size: 18px; font-weight: 700; line-height: 1.444em; letter-spacing: -.028em; color: var(--color-black-700); }
+    .card-cs__desc  { font-size: 16px; font-weight: 400; line-height: 1.5em; color: var(--color-black-600); }
+
+    /* =============================================
+       CTA Banner
+    ============================================= */
+    .cta-banner {
+      width: 100%;
+      height: 320px;
+      display: flex; align-items: center;
+      background: linear-gradient(143deg, #000 0%, #022880 100%);
+      position: relative; overflow: hidden;
+    }
+    .cta-banner__bg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; pointer-events: none; z-index: 0;
+    }
+    .cta-inner {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 1680px; margin: 0 auto;
+      padding: 0 var(--px);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cta-left { display: flex; flex-direction: column; gap: 32px; }
+    .cta-text { display: flex; flex-direction: column; gap: 8px; }
+    .cta-heading { font-size: 22px; font-weight: 600; line-height: 1.455em; color: #fff; }
+    .cta-phone { display: flex; align-items: center; gap: 12px; }
+    .cta-phone-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .cta-phone-num { font-size: 32px; font-weight: 700; line-height: 1.406em; color: #fff; }
+    .cta-links { display: flex; gap: 24px; }
+    .cta-link { font-size: 16px; font-weight: 400; color: rgba(255,255,255,.8); text-decoration: underline; transition: color .15s; }
+    .cta-link:hover  { color: rgba(255,255,255,1); }
+    .cta-link:active { color: rgba(255,255,255,.55); }
+    .cta-btns { display: flex; align-items: center; gap: 16px; }
+
+    /* =============================================
+       Footer
+    ============================================= */
+    .footer {
+      background: #fff; padding: 72px var(--px);
+      border-top: 1px solid var(--color-black-200);
+    }
+    .footer-inner { display: flex; flex-direction: column; gap: 48px; }
+    .footer-top   { display: flex; align-items: center; justify-content: space-between; }
+    .footer-top-left { display: flex; align-items: center; gap: 48px; }
+    .footer-logo  { font-size: 20px; font-weight: 800; color: var(--color-black-700); display: flex; align-items: center; }
+    .footer-logo img { height: 28px; width: auto; display: block; }
+    .gnb__logo img { height: 26px; width: auto; display: block; }
+    .footer-nav   { display: flex; align-items: center; gap: 16px; }
+    .footer-nav a { font-size: 18px; font-weight: 400; line-height: 1.444em; color: var(--color-black-600); transition: color .15s; }
+    .footer-nav a:hover  { text-decoration: underline; color: var(--color-black-700); }
+    .footer-nav a:active { text-decoration: underline; color: var(--color-black-900); }
+    .footer-nav a.highlight { color: var(--color-blue-500); }
+    .footer-cert-text { font-size: 14px; font-weight: 400; line-height: 1.5em; color: var(--color-black-800); cursor: pointer; }
+    .footer-cert-text:hover  { text-decoration: underline; }
+    .footer-cert-text:active { text-decoration: underline; color: var(--color-black-700); }
+    .footer-nav-div { width: 1px; height: 18px; background: var(--color-black-300); }
+    .footer-sns { display: flex; gap: 12px; }
+    .footer-sns-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--color-black-200);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--color-black-600); cursor: pointer;
+      transition: background .15s;
+    }
+    .footer-sns-btn:hover  { background: #CDCDCD; }
+    .footer-sns-btn:active { background: #B8B8B8; }
+    .footer-certs { display: flex; align-items: center; gap: 32px; }
+    .footer-cert  { display: flex; align-items: center; gap: 8px; }
+    .footer-cert-badge {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: #fff; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .footer-info  { display: flex; flex-direction: column; gap: 8px; }
+    .footer-info-row { display: flex; flex-wrap: wrap; gap: 16px; }
+    .footer-info-item { font-size: 16px; font-weight: 400; line-height: 1.5em; color: var(--color-black-600); }
+    .footer-copy { font-size: 16px; font-weight: 600; line-height: 1.5em; color: var(--color-black-400); }
+
+    /* =============================================
+       Floating button
+    ============================================= */
+    .floating-btn {
+      position: fixed; right: 40px; bottom: 100px; z-index: 300;
+      width: 58px; height: 58px; border-radius: 50%;
+      background: var(--color-blue-500); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .floating-btn:hover  { background: #006DC4; }
+    .floating-btn:active { background: #005BA3; }
+    .floating-scroll-top {
+      position: fixed; right: 40px; bottom: 30px; z-index: 300;
+      width: 58px; height: 58px; border-radius: 50%;
+      background: rgb(204,223,240); color: rgb(0,128,221);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,128,221,.2);
+      transition: background .15s;
+    }
+    .floating-scroll-top:hover  { background: rgb(181,208,232); }
+    .floating-scroll-top:active { background: rgb(158,193,224); }
+
+    /* =============================================
+       SVG icon helper
+    ============================================= */
+    .icon-arrow {
+      display: block; width: 20px; height: 20px; flex-shrink: 0;
+    }
+
+    /* =============================================
+       Price tab datasets
+    ============================================= */
+    .price-dataset { display: flex; flex-direction: column; gap: 24px; }
+    .price-dataset:not(.is-active) { display: none; }
+
+    /* 100인 bannerSales */
+    .banner-sales {
+      border-radius: 12px; padding: 24px 96px;
+      background: #0080DD; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center; min-height: 120px;
+    }
+    .banner-sales__bg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; pointer-events: none;
+    }
+    .banner-sales__content {
+      position: relative; z-index: 1;
+      width: 100%;
+      display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+    }
+    .banner-sales__text { display: flex; flex-direction: column; gap: 4px; }
+    .banner-sales__heading { font-size: 22px; font-weight: 700; line-height: 1.455em; color: #fff; }
+    .banner-sales__body    { font-size: 18px; font-weight: 400; line-height: 1.5em; color: #E9E9E9; }
+    .banner-sales__phone   { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .banner-sales__num     { font-size: 32px; font-weight: 700; color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- ===== GNB ===== -->
+<header class="gnb gnb--dark" id="gnb">
+  <div class="gnb__left">
+    <div class="gnb__logo"><img src="./images/gnb__logo.png" alt="hiworks"></div>
+    <nav class="gnb__menu">
+      <a>상품소개</a>
+      <a>이용요금</a>
+      <a>고객지원</a>
+      <a>매거진</a>
+      <a>공공기관용
+        <svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </nav>
+  </div>
+  <div class="gnb__right">
+    <button class="btn btn--tertiary-40" id="btn-download">다운로드</button>
+    <button class="btn btn--tertiary-40" id="btn-login">로그인</button>
+    <button class="btn btn--primary-40">무료 시작</button>
+  </div>
+</header>
+
+<!-- ===== HERO BANNER ===== -->
+<section class="hero-banner" id="hero-banner">
+  <video class="hero-banner__video" src="./videos/hero-banner-video.mp4" autoplay loop muted playsinline></video>
+  <button class="scroll-down-btn" id="scrollDownBtn" aria-label="아래로 스크롤">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 5V19M5 12l7 7 7-7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</section>
+
+<div class="page-wrap">
+
+<!-- ===== PAGE BODY ===== -->
+<main class="page-body">
+
+  <!-- Section 1: Main Banner -->
+  <section class="sec-main">
+    <h2 class="sec-main__header">프로들이 만들고 프로들이 사용하는<br>올인원 업무 플랫폼, 하이웍스</h2>
+    <div class="main-body">
+    <div class="main-banner">
+      <video class="main-banner__video" src="./videos/main-banner-video.mp4" autoplay loop muted playsinline></video>
+      <!-- Left content -->
+      <div class="main-banner__content">
+        <div class="main-banner__text">
+          <p class="main-banner__subtitle">하이웍스 내에서 AI 채팅을 시작해요</p>
+          <p class="main-banner__title">One Connected Flow.<br>Driven by AI.</p>
+        </div>
+        <button class="btn btn--primary-60">자세히 보기</button>
+      </div>
+
+      <!-- Right glass panel -->
+      <div class="main-banner__panel">
+        <ul class="main-banner__menu">
+          <li><button class="main-banner__menu-btn"><span class="main-banner__menu-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.8477 20.236C20.8477 20.7882 20.3999 21.236 19.8477 21.236H3.84766C3.29537 21.236 2.84766 20.7882 2.84766 20.236V9.23596H20.8477V20.236ZM6.84766 16.736C6.29537 16.736 5.84766 17.1837 5.84766 17.736C5.84766 18.2882 6.29537 18.736 6.84766 18.736H11.8477C12.3999 18.736 12.8477 18.2882 12.8477 17.736C12.8477 17.1837 12.3999 16.736 11.8477 16.736H6.84766ZM19.8477 3.73596C20.3999 3.73596 20.8477 4.18368 20.8477 4.73596V7.73596H2.84766V4.73596C2.84766 4.18368 3.29537 3.73596 3.84766 3.73596H19.8477Z" fill="white"/></svg></span>연장/ 결제</button></li>
+          <li><button class="main-banner__menu-btn"><span class="main-banner__menu-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 2.5C19.8284 2.5 20.5 3.17157 20.5 4V20C20.5 20.8284 19.8284 21.5 19 21.5H5C4.17157 21.5 3.5 20.8284 3.5 20V4C3.5 3.17157 4.17157 2.5 5 2.5H19ZM13 5.5C12.7239 5.5 12.5 5.72386 12.5 6V11.876C12.5001 12.1273 12.7909 12.2672 12.9873 12.1104L14.8125 10.6504C14.9221 10.5627 15.0779 10.5627 15.1875 10.6504L17.0127 12.1104C17.2091 12.2672 17.4999 12.1273 17.5 11.876V6C17.5 5.72386 17.2761 5.5 17 5.5H13Z" fill="white"/></svg></span>소개서 신청</button></li>
+          <li><button class="main-banner__menu-btn"><span class="main-banner__menu-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 2.5C7.55228 2.5 8 2.94772 8 3.5V5.5H16V3.5C16 2.94772 16.4477 2.5 17 2.5H18C18.5523 2.5 19 2.94772 19 3.5V5.5H19.5C20.3284 5.5 21 6.17157 21 7V20C21 20.8284 20.3284 21.5 19.5 21.5H4.5C3.67157 21.5 3 20.8284 3 20V7C3 6.17157 3.67157 5.5 4.5 5.5H5V3.5C5 2.94772 5.44772 2.5 6 2.5H7ZM5.5 10.5C5.22386 10.5 5 10.7239 5 11V19C5 19.2761 5.22386 19.5 5.5 19.5H18.5C18.7761 19.5 19 19.2761 19 19V11C19 10.7239 18.7761 10.5 18.5 10.5H5.5ZM8.71875 12C9.82332 12 10.7188 12.8954 10.7188 14C10.7188 15.1046 9.82332 16 8.71875 16C7.61418 16 6.71875 15.1046 6.71875 14C6.71875 12.8954 7.61418 12 8.71875 12Z" fill="white"/></svg></span>이벤트</button></li>
+          <li><button class="main-banner__menu-btn"><span class="main-banner__menu-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.0645 12.8715C10.6167 12.8715 11.0645 13.3192 11.0645 13.8715V19.8715C11.0643 20.4236 10.6167 20.8715 10.0645 20.8715H4.06445C3.51225 20.8715 3.06459 20.4236 3.06445 19.8715V13.8715C3.06445 13.3192 3.51217 12.8715 4.06445 12.8715H10.0645ZM19.5645 12.8715C20.1167 12.8715 20.5645 13.3192 20.5645 13.8715V19.8715C20.5643 20.4236 20.1167 20.8715 19.5645 20.8715H13.5645C13.0122 20.8715 12.5646 20.4236 12.5645 19.8715V13.8715C12.5645 13.3192 13.0122 12.8715 13.5645 12.8715H19.5645ZM15.8574 2.42127C16.248 2.03107 16.8811 2.03085 17.2715 2.42127L21.5137 6.66443C21.9041 7.05497 21.9042 7.688 21.5137 8.0785L17.2715 12.3207C16.881 12.7112 16.248 12.7111 15.8574 12.3207L11.6143 8.0785C11.2238 7.68804 11.2239 7.05497 11.6143 6.66443L15.8574 2.42127ZM10.0645 3.37147C10.6167 3.37147 11.0645 3.81918 11.0645 4.37147V10.3715C11.0643 10.9236 10.6167 11.3715 10.0645 11.3715H4.06445C3.51225 11.3715 3.06459 10.9236 3.06445 10.3715V4.37147C3.06445 3.81918 3.51217 3.37147 4.06445 3.37147H10.0645Z" fill="white"/></svg></span>플러스앱</button></li>
+          <li><button class="main-banner__menu-btn"><span class="main-banner__menu-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.9951 2.98596C15.2604 2.98596 18.0366 5.0733 19.0664 7.98596H19.499C20.6036 7.98596 21.499 8.88139 21.499 9.98596V11.986C21.499 13.0905 20.6036 13.986 19.499 13.986H19.4951V14.486C19.4951 18.6281 16.1373 21.986 11.9951 21.986C11.4428 21.986 10.9951 21.5382 10.9951 20.986C10.9951 20.4337 11.4428 19.986 11.9951 19.986C15.0327 19.986 17.4951 17.5235 17.4951 14.486V10.486C17.4951 7.4484 15.0327 4.98596 11.9951 4.98596C9.03904 4.98596 6.62823 7.31807 6.50098 10.2428V12.986C6.50098 13.5382 6.05326 13.986 5.50098 13.986H4.50098C3.39641 13.986 2.50098 13.0905 2.50098 11.986V9.98596C2.50098 8.88139 3.39641 7.98596 4.50098 7.98596H4.92383C5.95359 5.0733 8.7298 2.98596 11.9951 2.98596ZM14.3564 14.986C14.4356 14.9862 14.4998 15.0503 14.5 15.1295C14.5 16.4277 13.4476 17.481 12.1494 17.4811H11.8506C10.5524 17.481 9.5 16.4277 9.5 15.1295C9.5002 15.0503 9.56436 14.9862 9.64355 14.986H14.3564Z" fill="white"/></svg></span>고객센터</button></li>
+        </ul>
+        <div class="main-banner__pagination">
+          <div class="main-banner__pagination-side">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5752 9.99951L12.293 3.28271L13 3.98975L6.98926 9.99951L13 16.0103L12.293 16.7173L5.5752 9.99951Z" fill="#969696"/></svg>
+            <span>01</span>
+          </div>
+          <div class="main-banner__slash"></div>
+          <div class="main-banner__pagination-side">
+            <span>02</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.4248 10.0005L6.70703 16.7173L6 16.0103L12.0107 10.0005L6 3.98975L6.70703 3.28271L13.4248 10.0005Z" fill="white"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature cards -->
+    <div class="main-cards">
+      <div class="card-main card-main--blue">
+        <span class="card-main__label card-main__label--blue">OFFICE</span>
+        <div class="card-main__body">
+          <p class="card-main__title">그룹웨어</p>
+          <p class="card-main__desc">메일, 메신저, 근무관리, 전자결재까지<br>오피스 환경 구축을 하이웍스 하나로 한번에</p>
+        </div>
+      </div>
+      <div class="card-main card-main--blue">
+        <span class="card-main__label card-main__label--blue">HR</span>
+        <div class="card-main__body">
+          <p class="card-main__title">근무관리(+전자결재)</p>
+          <p class="card-main__desc">다양한 근무 타입,<br>주 52시간 근무제 대응도 문제없이</p>
+        </div>
+      </div>
+      <div class="card-main card-main--purple">
+        <span class="card-main__label card-main__label--purple">ERP</span>
+        <div class="card-main__body">
+          <p class="card-main__title">경비지출관리</p>
+          <p class="card-main__desc">법인 카드 연동으로 사용 내역은<br>정확하게 관리는 쉽게</p>
+        </div>
+      </div>
+      <div class="card-main card-main--ai">
+        <span class="card-main__label card-main__label--ai">AI</span>
+        <div class="card-main__body">
+          <p class="card-main__title">하이웍스 AI</p>
+          <p class="card-main__desc">우리 회사 데이터를 이해하는<br>하이웍스 AI로 업무는 더 빠르게</p>
+        </div>
+      </div>
+    </div>
+    </div><!-- /.main-body -->
+  </section>
+
+  <!-- Section 2: Features -->
+  <section class="sec-features">
+    <h2 class="sec-title">기업의 성장을 위한 다양한 기능을 제공합니다.</h2>
+    <div class="features-tab-row">
+      <div class="tab-bar" id="featureTabs">
+        <button class="tab is-active" data-tab="0">기업메일</button>
+        <button class="tab" data-tab="1">그룹웨어</button>
+        <button class="tab" data-tab="2">인사근무</button>
+        <button class="tab" data-tab="3">경리회계</button>
+        <button class="tab" data-tab="4">세금계산서</button>
+      </div>
+      <div class="features-carousel-nav">
+        <button class="carousel-arrow" id="featPrev" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="carousel-arrow" id="featNext">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 기업메일 -->
+    <div class="features-grid is-active" data-grid="0">
+      <div class="card-fn-big card-fn-big--email">
+        <div class="card-fn-big__top">
+          <p class="card-fn-big__title">기업메일</p>
+          <p class="card-fn-big__desc">20년 이상의 노하우로 구축한<br>안정적인 기업 전용 보안 메일</p>
+        </div>
+        <button class="card-fn-big__btn">자세히 보기</button>
+      </div>
+      <div class="features-scroll">
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">공용메일</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">별도의 공용메일함에서<br>팀 단위로 메일 수발신</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">멀티메일</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">하나의 메일 화면에서 여러<br>계정으로 메일을 수발신</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">승인메일</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">승인자의 승인을 거쳐 회사<br>기밀 유출을 사전 차단</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">로그인 2단계 인증</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">이중 보안 서비스를 통한<br>메일 보안성 상승</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">메일 감사 자료 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">다양한 메일<br>감사 자료 관리 가능</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">삭제 메일 경로 확인</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">삭제된 메일의 경로<br>확인 가능</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">강력 메일 검색</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">메일 본문 속 단어까지<br>검색 가능</p></div>
+        </div>
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">그룹메일</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">그룹 내 모든 사용자<br>각각의 계정으로 메일 전송</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">암호메일</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">비밀번호, 열람 가능 횟수,<br>열람 유효 기간 설정 가능</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">접속 IP 통제</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">접속 허용IP 또는<br>IP대역 지정</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">자동 로그인 차단</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">반복 비밀번호 오류 시<br>자동으로 로그인 차단</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">POP3/SMTP 설정</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">회사 정책에 따라<br>POP3/SMTP 사용 제한</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">최대 5년 보관</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">메일 데이터를 아카이빙에<br>안전하게 보관</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">스팸 차단 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">스팸 메일 자동 분류<br>기능의 정확도 상승</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 그룹웨어 -->
+    <div class="features-grid" data-grid="1">
+      <div class="card-fn-big card-fn-big--group">
+        <div class="card-fn-big__top">
+          <p class="card-fn-big__title">그룹웨어</p>
+          <p class="card-fn-big__desc">메신저부터 전자결재까지<br>업무 효율을 높이는 통합 협업 플랫폼</p>
+        </div>
+        <button class="card-fn-big__btn">자세히 보기</button>
+      </div>
+      <div class="features-scroll">
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">메신저</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">팀 전체와 실시간으로<br>메시지를 주고받기</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">전자결재</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">기안부터 승인까지<br>결재 프로세스 자동화</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">스케줄/캘린더</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">개인/팀 일정을<br>한눈에 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">게시판</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">다양한 사내 소식과<br>정보를 효율적으로 공유</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">주소록</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">사내 구성원 연락처를<br>체계적으로 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">업무일지</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">일별·주별 업무 현황을<br>손쉽게 기록·공유</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">화상회의</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">어디서든 끊김 없는<br>화상 회의 진행</p></div>
+        </div>
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">공지사항</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">중요 공지를 전 직원에게<br>빠르게 전달</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">설문</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">사내 설문·투표를<br>간편하게 진행</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">드라이브</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">업무 파일을 안전하게<br>저장하고 협업</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">조직도</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">회사 조직 구조를<br>시각적으로 파악</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">자원 예약</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">회의실·비품 등 공용<br>자원을 효율적으로 예약</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">프로젝트 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">프로젝트 일정과 진행<br>상황을 한곳에서 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">모바일 앱</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">언제 어디서나 스마트폰으로<br>그룹웨어 이용</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 인사근무 -->
+    <div class="features-grid" data-grid="2">
+      <div class="card-fn-big card-fn-big--hr">
+        <div class="card-fn-big__top">
+          <p class="card-fn-big__title">인사근무</p>
+          <p class="card-fn-big__desc">다양한 근무 유형과 주 52시간 근무제<br>대응을 하이웍스 하나로 해결</p>
+        </div>
+        <button class="card-fn-big__btn">자세히 보기</button>
+      </div>
+      <div class="features-scroll">
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">근무 유형 설정</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">유연근무·재택 등 다양한<br>근무 형태 맞춤 설정</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">출퇴근 기록</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">GPS·QR 등 다양한 방식의<br>출퇴근 기록 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">연차 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">법정 연차 자동 계산과<br>잔여 연차 실시간 확인</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">초과근무 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">시간외 근무를 자동 집계해<br>정확하게 보상 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">휴가 신청</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">모바일로 간편하게<br>휴가 신청 및 승인</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">주 52시간 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">주 52시간 근무제 준수<br>여부 자동 모니터링</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">근로계약 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">전자서명으로 근로계약서를<br>빠르고 간편하게 처리</p></div>
+        </div>
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">급여 계산</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">근무 데이터 기반으로<br>급여를 정확하게 자동 산출</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">발령/승진 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">직원 발령·승진 이력을<br>체계적으로 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">성과 평가</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">공정한 평가 체계로<br>직원 성과를 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">인사정보 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">직원 기본정보부터 경력까지<br>통합 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">퇴직금 산정</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">근무 이력에 따라<br>퇴직금을 자동 계산</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">교육 이수 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">사내 교육 수강 현황과<br>이수 이력 체계 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">조직 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">부서·팀 구조 변경을<br>간편하게 반영</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 경리회계 -->
+    <div class="features-grid" data-grid="3">
+      <div class="card-fn-big card-fn-big--erp">
+        <div class="card-fn-big__top">
+          <p class="card-fn-big__title">경리회계</p>
+          <p class="card-fn-big__desc">법인카드 연동부터 결산까지<br>투명하고 정확한 재무 관리</p>
+        </div>
+        <button class="card-fn-big__btn">자세히 보기</button>
+      </div>
+      <div class="features-scroll">
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">법인카드 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">법인카드 사용 내역을<br>자동으로 수집·분류</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">경비 신청/정산</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">경비 신청부터 정산까지<br>페이퍼리스로 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">전표 처리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">입금·출금·대체 전표를<br>빠르게 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">예산 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">부서별 예산 편성과<br>집행 현황 실시간 확인</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">세금계산서 연동</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">전자세금계산서를<br>회계 데이터와 자동 연동</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">매출/매입 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">매출·매입 현황을<br>한눈에 파악</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">재무제표</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">대차대조표·손익계산서를<br>자동으로 생성</p></div>
+        </div>
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">결산 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">월·분기·연간 결산을<br>체계적으로 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">계좌 연동</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">은행 계좌 내역을<br>자동으로 가져와 관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">고정자산 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">유형·무형 고정자산의<br>감가상각을 자동 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">손익 분석</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">기간별·항목별 손익을<br>그래프로 시각화</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">비용 승인</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">지출 승인 프로세스를<br>모바일로 간편하게 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">영수증 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">영수증 사진 촬영으로<br>경비 내역 자동 입력</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">부가세 신고</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">부가세 신고에 필요한<br>자료를 자동으로 집계</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 세금계산서 -->
+    <div class="features-grid" data-grid="4">
+      <div class="card-fn-big card-fn-big--tax">
+        <div class="card-fn-big__top">
+          <p class="card-fn-big__title">세금계산서</p>
+          <p class="card-fn-big__desc">국세청 연동 전자세금계산서<br>발행부터 관리까지 한번에</p>
+        </div>
+        <button class="card-fn-big__btn">자세히 보기</button>
+      </div>
+      <div class="features-scroll">
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">전자세금계산서 발행</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">국세청 연동으로 전자세금계산서를<br>빠르고 정확하게 발행</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">매출 세금계산서</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">매출 세금계산서 발행·관리를<br>한눈에 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">매입 세금계산서</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">거래처로부터 수신된<br>세금계산서 자동 수집·관리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">일괄 발행</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">여러 건을 한 번에 선택해<br>세금계산서 일괄 발행</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">자동 발행</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">매월 반복 발행을<br>자동화로 절감</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">국세청 전송</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">발행 즉시 국세청으로<br>자동 전송 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">세금계산서 조회</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">기간·거래처·금액별로<br>세금계산서 검색·조회</p></div>
+        </div>
+        <div class="features-row">
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">합계표 조회</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">매출·매입 세금계산서<br>합계표를 자동 생성</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">고객사 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">거래처 정보를 등록하고<br>발행 이력 한눈에 확인</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">수정 세금계산서</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">기발행 세금계산서의 수정·취소를<br>간편하게 처리</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">영세율 계산서</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">수출 기업을 위한<br>영세율 세금계산서 지원</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">미발행 내역 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">발행 누락 없이 미발행<br>내역을 자동으로 알림</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">계산서 통계</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">월별·거래처별 발행 통계를<br>차트로 시각화</p></div>
+          <div class="card-fn"><div class="card-fn__head"><p class="card-fn__title">공급자 관리</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-fn__desc">공급업체 정보와 거래 이력을<br>체계적으로 관리</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Stats -->
+  <section class="sec-stats">
+    <h2 class="sec-title">이미 13만+ 고객사가 하이웍스로 일합니다.</h2>
+    <div class="banner-rank">
+      <div class="stats-row">
+        <div class="stat">
+          <p class="stat__num">1위</p>
+          <p class="stat__label">협업툴/ 메신저 시장점유율</p>
+          <p class="stat__source">출처: 더 리서치 컴퍼니</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <p class="stat__num">1위</p>
+          <p class="stat__label">그룹웨어/ 기업메일 시장점유율</p>
+          <p class="stat__source">출처: 더 리서치 컴퍼니</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <p class="stat__num">13만+</p>
+          <p class="stat__label">국내 고객사 수</p>
+        </div>
+      </div>
+    </div>
+    <div class="logo-loop">
+      <div class="logo-track">
+        <div class="logo-chip"><img src="./images/관세청.png" alt="관세청"></div>
+        <div class="logo-chip"><img src="./images/던필드알파 크로커다일.png" alt="던필드알파 크로커다일"></div>
+        <div class="logo-chip"><img src="./images/KBS.png" alt="KBS"></div>
+        <div class="logo-chip"><img src="./images/한길안과병원.png" alt="한길안과병원"></div>
+        <div class="logo-chip"><img src="./images/신한은행.png" alt="신한은행"></div>
+        <div class="logo-chip"><img src="./images/에스원.png" alt="에스원"></div>
+        <div class="logo-chip"><img src="./images/아트박스.png" alt="아트박스"></div>
+        <div class="logo-chip"><img src="./images/인포유금융서비스.png" alt="인포유금융서비스"></div>
+        <div class="logo-chip"><img src="./images/그린카.png" alt="그린카"></div>
+        <div class="logo-chip"><img src="./images/보그인터네셔널.png" alt="보그인터네셔널"></div>
+        <div class="logo-chip"><img src="./images/서울경제.png" alt="서울경제"></div>
+        <div class="logo-chip"><img src="./images/혜민의원.png" alt="혜민의원"></div>
+        <div class="logo-chip"><img src="./images/천우모터스.png" alt="천우모터스"></div>
+        <div class="logo-chip"><img src="./images/NH농협무역.png" alt="NH농협무역"></div>
+        <div class="logo-chip"><img src="./images/에셋플러스.png" alt="에셋플러스"></div>
+        <div class="logo-chip"><img src="./images/AIR KOREA.png" alt="AIR KOREA"></div>
+        <div class="logo-chip"><img src="./images/관세청.png" alt="관세청"></div>
+        <div class="logo-chip"><img src="./images/던필드알파 크로커다일.png" alt="던필드알파 크로커다일"></div>
+        <div class="logo-chip"><img src="./images/KBS.png" alt="KBS"></div>
+        <div class="logo-chip"><img src="./images/한길안과병원.png" alt="한길안과병원"></div>
+        <div class="logo-chip"><img src="./images/신한은행.png" alt="신한은행"></div>
+        <div class="logo-chip"><img src="./images/에스원.png" alt="에스원"></div>
+        <div class="logo-chip"><img src="./images/아트박스.png" alt="아트박스"></div>
+        <div class="logo-chip"><img src="./images/인포유금융서비스.png" alt="인포유금융서비스"></div>
+        <div class="logo-chip"><img src="./images/그린카.png" alt="그린카"></div>
+        <div class="logo-chip"><img src="./images/보그인터네셔널.png" alt="보그인터네셔널"></div>
+        <div class="logo-chip"><img src="./images/서울경제.png" alt="서울경제"></div>
+        <div class="logo-chip"><img src="./images/혜민의원.png" alt="혜민의원"></div>
+        <div class="logo-chip"><img src="./images/천우모터스.png" alt="천우모터스"></div>
+        <div class="logo-chip"><img src="./images/NH농협무역.png" alt="NH농협무역"></div>
+        <div class="logo-chip"><img src="./images/에셋플러스.png" alt="에셋플러스"></div>
+        <div class="logo-chip"><img src="./images/AIR KOREA.png" alt="AIR KOREA"></div>
+      </div>
+      <div class="logo-track" style="animation-direction:reverse;">
+        <div class="logo-chip"><img src="./images/AIR KOREA.png" alt="AIR KOREA"></div>
+        <div class="logo-chip"><img src="./images/에셋플러스.png" alt="에셋플러스"></div>
+        <div class="logo-chip"><img src="./images/NH농협무역.png" alt="NH농협무역"></div>
+        <div class="logo-chip"><img src="./images/천우모터스.png" alt="천우모터스"></div>
+        <div class="logo-chip"><img src="./images/혜민의원.png" alt="혜민의원"></div>
+        <div class="logo-chip"><img src="./images/서울경제.png" alt="서울경제"></div>
+        <div class="logo-chip"><img src="./images/보그인터네셔널.png" alt="보그인터네셔널"></div>
+        <div class="logo-chip"><img src="./images/그린카.png" alt="그린카"></div>
+        <div class="logo-chip"><img src="./images/인포유금융서비스.png" alt="인포유금융서비스"></div>
+        <div class="logo-chip"><img src="./images/아트박스.png" alt="아트박스"></div>
+        <div class="logo-chip"><img src="./images/에스원.png" alt="에스원"></div>
+        <div class="logo-chip"><img src="./images/신한은행.png" alt="신한은행"></div>
+        <div class="logo-chip"><img src="./images/한길안과병원.png" alt="한길안과병원"></div>
+        <div class="logo-chip"><img src="./images/KBS.png" alt="KBS"></div>
+        <div class="logo-chip"><img src="./images/관세청.png" alt="관세청"></div>
+        <div class="logo-chip"><img src="./images/던필드알파 크로커다일.png" alt="던필드알파 크로커다일"></div>
+        <div class="logo-chip"><img src="./images/AIR KOREA.png" alt="AIR KOREA"></div>
+        <div class="logo-chip"><img src="./images/에셋플러스.png" alt="에셋플러스"></div>
+        <div class="logo-chip"><img src="./images/NH농협무역.png" alt="NH농협무역"></div>
+        <div class="logo-chip"><img src="./images/천우모터스.png" alt="천우모터스"></div>
+        <div class="logo-chip"><img src="./images/혜민의원.png" alt="혜민의원"></div>
+        <div class="logo-chip"><img src="./images/서울경제.png" alt="서울경제"></div>
+        <div class="logo-chip"><img src="./images/보그인터네셔널.png" alt="보그인터네셔널"></div>
+        <div class="logo-chip"><img src="./images/그린카.png" alt="그린카"></div>
+        <div class="logo-chip"><img src="./images/인포유금융서비스.png" alt="인포유금융서비스"></div>
+        <div class="logo-chip"><img src="./images/아트박스.png" alt="아트박스"></div>
+        <div class="logo-chip"><img src="./images/에스원.png" alt="에스원"></div>
+        <div class="logo-chip"><img src="./images/신한은행.png" alt="신한은행"></div>
+        <div class="logo-chip"><img src="./images/한길안과병원.png" alt="한길안과병원"></div>
+        <div class="logo-chip"><img src="./images/KBS.png" alt="KBS"></div>
+        <div class="logo-chip"><img src="./images/관세청.png" alt="관세청"></div>
+        <div class="logo-chip"><img src="./images/던필드알파 크로커다일.png" alt="던필드알파 크로커다일"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Why Hiworks -->
+  <section class="sec-why">
+    <div class="why-wrap">
+      <div class="why-inner">
+        <div class="why-left">
+          <h2 class="why-heading">왜 많은 기업이<br>하이웍스를 선택할까요?</h2>
+          <div class="why-tabs" id="whyTabs">
+            <div class="why-tab is-active">
+              <span class="why-tab__label">Enterprise Security</span>
+              <svg class="why-tab__arrow" viewBox="0 0 20 20" fill="none"><path d="M3.5 10h13M10 3.5l6.5 6.5-6.5 6.5" stroke="#E9E9E9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="why-tab">
+              <span class="why-tab__label">Premium Support</span>
+              <svg class="why-tab__arrow" viewBox="0 0 20 20" fill="none"><path d="M3.5 10h13M10 3.5l6.5 6.5-6.5 6.5" stroke="#E9E9E9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="why-tab">
+              <span class="why-tab__label">Continuous Updates</span>
+              <svg class="why-tab__arrow" viewBox="0 0 20 20" fill="none"><path d="M3.5 10h13M10 3.5l6.5 6.5-6.5 6.5" stroke="#E9E9E9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="why-right">
+
+          <!-- Panel 1: Enterprise Security (기본 활성화) -->
+          <div class="why-panel is-active">
+            <div class="cert-top">
+              <span class="cert-badge">Certifications</span>
+            </div>
+            <div class="cert-imgs">
+              <img src="./images/cert-imgs-enterprisesecurity.png" alt="Enterprise Security certifications" class="cert-imgs__img">
+            </div>
+            <div class="cert-body">
+              <p class="cert-title">보안 인증과 안정성</p>
+              <div class="cert-list">
+                <p class="cert-item">1. 클라우드(Saas) 보안인증 CSAP 획득</p>
+                <p class="cert-item">2. ERP/그룹웨어 개발 분야 랭킹순위 1위</p>
+                <p class="cert-item">3. 정보보안 관리체계 ISMS 인증</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Premium Support -->
+          <div class="why-panel">
+            <div class="cert-top">
+              <span class="cert-badge">Premium Support</span>
+            </div>
+            <div class="cert-imgs">
+              <img src="./images/cert-imgs-premiumsupport.png" alt="Premium Support" class="cert-imgs__img">
+            </div>
+            <div class="cert-body">
+              <p class="cert-title">24/7 전문가 고객 지원</p>
+              <div class="cert-list">
+                <p class="cert-item">1. 전담 운영팀의 빠른 문제 해결 지원</p>
+                <p class="cert-item">2. 전화, 메일, 채팅 등 다양한 상담 채널</p>
+                <p class="cert-item">3. 원격 지원 서비스로 즉각적인 문제 해결</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3: Continuous Updates -->
+          <div class="why-panel">
+            <div class="cert-top">
+              <span class="cert-badge">Continuous Updates</span>
+            </div>
+            <div class="cert-imgs">
+              <img src="./images/cert-imgs-continuousupdates.png" alt="Continuous Updates" class="cert-imgs__img">
+            </div>
+            <div class="cert-body">
+              <p class="cert-title">지속적인 서비스 업데이트</p>
+              <div class="cert-list">
+                <p class="cert-item">1. 법정 의무 사항을 반영한 신속한 업데이트</p>
+                <p class="cert-item">2. 고객 피드백 기반의 지속적인 기능 개선</p>
+                <p class="cert-item">3. 정기 업데이트로 항상 최신 기능 제공</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Pricing -->
+  <section class="sec-price">
+    <h2 class="sec-title">가장 많이 사용하는 상품을 추천해 드려요.</h2>
+    <div class="price-tabs-row">
+      <div class="tab-bar" id="priceTabs">
+        <button class="tab is-active">10인</button>
+        <button class="tab">20인</button>
+        <button class="tab">50인</button>
+        <button class="tab">100인</button>
+      </div>
+      <a class="link-more">전체보기 <svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#4B4B4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <!-- 10인 -->
+    <div class="price-dataset is-active" data-price="0">
+      <div class="price-cards">
+        <div class="card-price">
+          <span class="card-price__label">메일 10</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">1,925</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 3,850원</s><span>· 첫해 할인가</span></p>
+          <p class="card-price__desc">20년 이상 축적한 노하우로 안정성을 갖춘 무제한 용량의 보안메일</p>
+          <p class="card-price__sub">월 19,250원 (10인 기준) / 연 231,000원 (10인 기준)</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 10</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">2,200</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 4,400원</s></p>
+          <p class="card-price__desc">무제한 보안메일에 전자결재, 근무관리까지 합리적 비용의 그룹웨어</p>
+          <p class="card-price__sub">월 22,000원 / 연 264,000원</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 CUSTOM</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">3,300</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 6,600원</s></p>
+          <p class="card-price__desc">우리 회사 시스템에 맞춤형으로 커스터마이징 가능한 그룹웨어</p>
+          <p class="card-price__sub">시작가 월 330,000원 / 계정 수 100인 이상 신청 가능</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 20인 -->
+    <div class="price-dataset" data-price="1">
+      <div class="price-cards">
+        <div class="card-price">
+          <span class="card-price__label">메일 20</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">1,925</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 3,850원</s><span>· 첫해 할인가</span></p>
+          <p class="card-price__desc">20년 이상 축적한 노하우로 안정성을 갖춘 무제한 용량의 보안메일</p>
+          <p class="card-price__sub">월 48,125원 (20인 기준) / 연 577,500원 (20인 기준)</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 20</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">2,200</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 4,400원</s></p>
+          <p class="card-price__desc">무제한 보안메일에 전자결재, 근무관리까지 합리적 비용의 그룹웨어</p>
+          <p class="card-price__sub">월 55,000원 (20인 기준) / 연 660,000원 (20인 기준)</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 CUSTOM</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">3,300</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 6,600원</s></p>
+          <p class="card-price__desc">우리 회사 시스템에 맞춤형으로 커스터마이징 가능한 그룹웨어</p>
+          <p class="card-price__sub">시작가 월 330,000원 / 계정 수 100인 이상 신청 가능</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 50인 -->
+    <div class="price-dataset" data-price="2">
+      <div class="price-cards">
+        <div class="card-price">
+          <span class="card-price__label">메일 50</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">1,925</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 3,850원</s><span>· 첫해 할인가</span></p>
+          <p class="card-price__desc">20년 이상 축적한 노하우로 안정성을 갖춘 무제한 용량의 보안메일</p>
+          <p class="card-price__sub">월 96,250원 (50인 기준) / 연 1,155,000원 (50인 기준)</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 50</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">2,200</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 4,400원</s></p>
+          <p class="card-price__desc">무제한 보안메일에 전자결재, 근무관리까지 합리적 비용의 그룹웨어</p>
+          <p class="card-price__sub">월 110,000원 (50인 기준) / 연 1,320,000원 (50인 기준)</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 CUSTOM</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">3,300</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 6,600원</s></p>
+          <p class="card-price__desc">우리 회사 시스템에 맞춤형으로 커스터마이징 가능한 그룹웨어</p>
+          <p class="card-price__sub">시작가 월 330,000원 / 계정 수 100인 이상 신청 가능</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 100인 -->
+    <div class="price-dataset" data-price="3">
+      <div class="price-cards">
+        <div class="card-price">
+          <span class="card-price__label">메일 100</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">1,925</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 3,850원</s><span>· 첫해 할인가</span></p>
+          <p class="card-price__desc">20년 이상 축적한 노하우로 안정성을 갖춘 무제한 용량의 보안메일</p>
+          <p class="card-price__sub">월 154,250원 (100인 기준) / 연 1,848,000원 (100인 기준)</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 100</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">2,200</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 4,400원</s></p>
+          <p class="card-price__desc">무제한 보안메일에 전자결재, 근무관리까지 합리적 비용의 그룹웨어</p>
+          <p class="card-price__sub">월 220,000원 (100인 기준) / 연 2,640,000원 (100인 기준)</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+        <div class="card-price">
+          <span class="card-price__label">그룹웨어 CUSTOM</span>
+          <div class="card-price__amount">
+            <span class="card-price__num">3,300</span>
+            <span class="card-price__unit">원/월</span>
+            <span class="card-price__basis">(1인 기준)</span>
+          </div>
+          <p class="card-price__tag"><s>정상가 6,600원</s></p>
+          <p class="card-price__desc">우리 회사 시스템에 맞춤형으로 커스터마이징 가능한 그룹웨어</p>
+          <p class="card-price__sub">시작가 월 330,000원 / 계정 수 100인 이상 신청 가능</p>
+          <button class="card-price__cta">신청하기</button>
+        </div>
+      </div>
+      <!-- 100인 특별 배너 -->
+      <div class="banner-sales">
+        <img src="./images/price-cards-100인-bg.png" class="banner-sales__bg" alt="">
+        <div class="banner-sales__content">
+          <div class="banner-sales__text">
+            <p class="banner-sales__heading">100인 이상 신청 고객을 위한 하이웍스 특별 도입상담</p>
+            <p class="banner-sales__body">엔터프라이즈 전문 영업팀이 상담을 도와드립니다.</p>
+          </div>
+          <div class="banner-sales__phone">
+            <div class="cta-phone-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="white"/></svg>
+            </div>
+            <span class="banner-sales__num">02-6948-3769</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Section 6: Benefits -->
+  <section class="sec-benefits">
+    <h2 class="sec-title">하이웍스의 다양한 혜택을 만나보세요.</h2>
+
+    <!-- Events -->
+    <div class="subsec">
+      <div class="subsec__head">
+        <h3 class="subsec__title">이벤트</h3>
+        <a class="link-more">전체보기 <svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#4B4B4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="events-grid">
+        <div class="card-event">
+          <div class="card-event__img"><img src="./images/card-event__img-2026.png" alt="2026 도약 지원"></div>
+          <div class="card-event__body">
+            <p class="card-event__title">2026 도약 지원</p>
+            <p class="card-event__date">2025-12-01 ~ 2026-02-28</p>
+          </div>
+        </div>
+        <div class="card-event">
+          <div class="card-event__img"><img src="./images/card-event__img-하이웍스 세일즈.png" alt="하이웍스 세일즈 출시"></div>
+          <div class="card-event__body">
+            <p class="card-event__title">하이웍스 세일즈 출시, 14일 무료 사용</p>
+            <p class="card-event__date">2025-11-26 ~ 2026-12-31</p>
+          </div>
+        </div>
+        <div class="card-event">
+          <div class="card-event__img"><img src="./images/card-event__img-30인.png" alt="30인 미만 인사관리 플랫폼 도입 지원"></div>
+          <div class="card-event__body">
+            <p class="card-event__title">30인 미만, 인사관리 플랫폼 도입 지원</p>
+            <p class="card-event__date">2026-01-26 ~ 2026-12-31</p>
+          </div>
+        </div>
+        <div class="card-event">
+          <div class="card-event__img"><img src="./images/card-event__img-하이웍스 기업교육.png" alt="하이웍스 기업교육 오픈 기념"></div>
+          <div class="card-event__body">
+            <p class="card-event__title">하이웍스 기업교육 오픈 기념, 법정의무교육</p>
+            <p class="card-event__date">2025-09-16 ~ 2026-12-31</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CS -->
+    <div class="subsec">
+      <div class="subsec__head">
+        <h3 class="subsec__title">고객지원 혜택</h3>
+      </div>
+      <div class="cs-grid">
+        <div class="cs-row">
+          <div class="card-cs"><div class="card-cs__head"><p class="card-cs__title">셀프 문제 해결</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-cs__desc">빠르게 해결하고 싶으시다면!</p></div>
+          <div class="card-cs"><div class="card-cs__head"><p class="card-cs__title">메일 이전하기</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-cs__desc">기존 이용하시던 메일을 빠르게 이전해요.</p></div>
+          <div class="card-cs"><div class="card-cs__head"><p class="card-cs__title">공인인증서 확인하기</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-cs__desc">전자세금계산서 서비스 이용 전, 확인해주세요.</p></div>
+          <div class="card-cs"><div class="card-cs__head"><p class="card-cs__title">고객지원</p><svg class="icon-arrow" viewBox="0 0 20 20" fill="none"><path d="M5 10h10M11 6l4 4-4 4" stroke="#191919" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="card-cs__desc">전문성을 갖춘 운영팀이 도움을 드려요.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</div><!-- /.page-wrap -->
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-banner">
+  <img src="./images/cta-banner__img.png" class="cta-banner__bg" alt="">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div class="cta-text">
+        <p class="cta-heading">지금 하이웍스를 경험하세요.</p>
+        <div class="cta-phone">
+          <div class="cta-phone-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="white"/></svg>
+          </div>
+          <p class="cta-phone-num">1661-4370</p>
+        </div>
+      </div>
+      <div class="cta-links">
+        <a class="cta-link">공지사항</a>
+        <a class="cta-link">자주하는 질문</a>
+        <a class="cta-link">도입이전</a>
+        <a class="cta-link">교육신청</a>
+        <a class="cta-link">서비스 소개서</a>
+      </div>
+    </div>
+    <div class="cta-btns">
+      <button class="btn btn--primary-48">무료로 시작하기</button>
+      <button class="btn btn--secondary-48">도입/ 이전 상담하기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-top-left">
+        <div class="footer-logo"><img src="./images/footer-logo.png" alt="Gabia"></div>
+        <nav class="footer-nav">
+          <a>서비스 이용약관</a>
+          <div class="footer-nav-div"></div>
+          <a class="highlight">개인정보처리방침</a>
+          <div class="footer-nav-div"></div>
+          <a>회사소개</a>
+          <div class="footer-nav-div"></div>
+          <a>채용</a>
+          <div class="footer-nav-div"></div>
+          <a>제휴 문의</a>
+        </nav>
+      </div>
+      <div class="footer-sns">
+        <div class="footer-sns-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" fill="currentColor"/></svg>
+        </div>
+        <div class="footer-sns-btn">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z" fill="currentColor"/></svg>
+        </div>
+        <div class="footer-sns-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="footer-certs">
+      <div class="footer-cert">
+        <div class="footer-cert-badge"><img src="./images/footer-cert-badge__img-국내1위.png" alt="국내 1위" style="width:100%;height:100%;object-fit:contain;"></div>
+        <p class="footer-cert-text">메일/그룹웨어 시장<br>국내 점유율 1위</p>
+      </div>
+      <div class="footer-cert">
+        <div class="footer-cert-badge"><img src="./images/footer-cert-badge__img-CSAP.png" alt="CSAP" style="width:100%;height:100%;object-fit:contain;"></div>
+        <p class="footer-cert-text">클라우드(Saas) 서비스<br>보안인증 CSAP 획득</p>
+      </div>
+      <div class="footer-cert">
+        <div class="footer-cert-badge"><img src="./images/footer-cert-badge__img-랭킹1위.png" alt="랭킹 1위" style="width:100%;height:100%;object-fit:contain;"></div>
+        <p class="footer-cert-text">ERP/그룹웨어 개발 분야<br>랭킹순위 1위</p>
+      </div>
+      <div class="footer-cert">
+        <div class="footer-cert-badge"><img src="./images/footer-cert-badge__img-ISMA.png" alt="ISMS" style="width:100%;height:100%;object-fit:contain;"></div>
+        <p class="footer-cert-text">정보보안 관리체계<br>ISMS 인증</p>
+      </div>
+    </div>
+    <div class="footer-info">
+      <div class="footer-info-row">
+        <span class="footer-info-item">대표이사: 김홍국</span>
+        <span class="footer-info-item">사업자 번호: 214-86-39239</span>
+        <span class="footer-info-item">통신판매업 신고번호: 제2024-경기과천-0258호</span>
+        <span class="footer-info-item">문의처: 1661-4370</span>
+      </div>
+      <div class="footer-info-row">
+        <span class="footer-info-item">주소: 경기도 과천시 과천대로7나길 34, 4~6층 (갈현동, 가비아 앳)</span>
+      </div>
+      <p class="footer-copy">©Gabia Inc. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== Floating Button ===== -->
+<button class="floating-btn">
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M22 13C22 17.97 17.97 22 13 22C11.46 22 10.01 21.61 8.74 20.93L4 22L4.93 17.26C4.25 15.99 3.86 14.54 3.86 13C3.86 8.03 7.89 4 12.86 4C17.83 4 21.86 8.03 21.86 13H22Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<button class="floating-scroll-top" id="scrollTopBtn" aria-label="맨 위로">
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 20V7M7 12l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<!-- ===== JS ===== -->
+<script>
+  // GNB: always white (hero removed)
+  const dlBtn = document.getElementById('btn-download');
+  const loginBtn = document.getElementById('btn-login');
+  [dlBtn, loginBtn].forEach(b => { b.className = 'btn btn--secondary-40'; });
+
+  // Price tabs — switch datasets
+  (function () {
+    const wrap = document.getElementById('priceTabs');
+    if (!wrap) return;
+    const tabs = wrap.querySelectorAll('.tab');
+    const datasets = document.querySelectorAll('.price-dataset');
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('is-active'));
+        datasets.forEach(d => d.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        if (datasets[i]) datasets[i].classList.add('is-active');
+      });
+    });
+  })();
+
+  // Features section: tab switching + carousel
+  (function () {
+    const tabs    = document.querySelectorAll('#featureTabs .tab');
+    const grids   = document.querySelectorAll('.features-grid[data-grid]');
+    const prevBtn = document.getElementById('featPrev');
+    const nextBtn = document.getElementById('featNext');
+    const STEP    = 243 + 20; // card width + gap
+
+    function activeScroll() {
+      const g = document.querySelector('.features-grid.is-active');
+      return g ? g.querySelector('.features-scroll') : null;
+    }
+
+    function updateArrows() {
+      const s = activeScroll();
+      if (!s) return;
+      prevBtn.disabled = s.scrollLeft <= 0;
+      nextBtn.disabled = s.scrollLeft >= s.scrollWidth - s.clientWidth - 1;
+    }
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('is-active'));
+        grids.forEach(g => g.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        grids[i].classList.add('is-active');
+        const s = grids[i].querySelector('.features-scroll');
+        if (s) { s.scrollLeft = 0; }
+        updateArrows();
+      });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      const s = activeScroll();
+      if (s) s.scrollBy({ left: -STEP, behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', () => {
+      const s = activeScroll();
+      if (s) s.scrollBy({ left: STEP, behavior: 'smooth' });
+    });
+
+    document.querySelectorAll('.features-scroll').forEach(s => {
+      s.addEventListener('scroll', () => {
+        const g = document.querySelector('.features-grid.is-active');
+        if (g && g.contains(s)) updateArrows();
+      });
+    });
+
+    updateArrows();
+  })();
+
+  // Why Hiworks — tab + panel switcher
+  (function () {
+    const whyTabs   = document.querySelectorAll('#whyTabs .why-tab');
+    const whyPanels = document.querySelectorAll('.why-panel');
+    whyTabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        whyTabs.forEach(t => t.classList.remove('is-active'));
+        whyPanels.forEach(p => p.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        whyPanels[i].classList.add('is-active');
+      });
+    });
+  })();
+
+  // Scroll to top button
+  document.getElementById('scrollTopBtn').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Hero scroll-down button → sec-main
+  document.getElementById('scrollDownBtn').addEventListener('click', () => {
+    const target = document.querySelector('.sec-main');
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // GNB dark/white mode based on hero-banner visibility
+  (function () {
+    const gnb  = document.getElementById('gnb');
+    const hero = document.getElementById('hero-banner');
+    if (!gnb || !hero) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        gnb.classList.replace('gnb--white', 'gnb--dark');
+      } else {
+        gnb.classList.replace('gnb--dark', 'gnb--white');
+      }
+    }, { threshold: 0 });
+    observer.observe(hero);
+  })();
+</script>
+</body>
+</html>
